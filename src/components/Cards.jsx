@@ -1,6 +1,8 @@
+import axios from 'axios';
 import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { GetDataWaifus } from '../services/GetDataWaifus';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -74,27 +76,35 @@ const SimpleButton = styled.button`
   border: 2px solid white;
 `;
 
-export const Cards = ({ data }) => {
+
+export const Cards = () => {
     const [isVisible, setIsVisible] = useState(true);
-  
+    const [waifus, setWaifus] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await GetDataWaifus();
+            setWaifus(data);
+        };
+
+        fetchData();
+    }, []);
+
     function handleClick() {
         setIsVisible(isVisible => !isVisible);
     }
 
-    const waifusEstudiantes = data.waifus.filter(waifu =>{  //las llaves permiten escribir más de una linea, pero deben tener el RETURN 
-      return waifu.rol === "estudiante"})
-
-  
     return (
       <>
+        <GlobalStyle />
         <SimpleButton onClick={handleClick}>
           {isVisible ? 'Ocultar cards' : 'Mostrar cards'}
         </SimpleButton>
         <CardsContainer>
-          {isVisible && data.waifus.map((waifu) => (
+          {isVisible && waifus.map((waifu) => (
             <Card key={waifu.id}>
               <ImageContainer>
-                <img src={waifu.img} alt="" />
+                <img src={waifu.img} alt={waifu.name} />
               </ImageContainer>
               <TextContainer>
                 <h1>{waifu.name}</h1>
@@ -104,21 +114,6 @@ export const Cards = ({ data }) => {
             </Card>
           ))}
         </CardsContainer>
-        {/* <h1>Waifus estudiantes:</h1>
-        <CardsContainer>
-            {waifusEstudiantes.map((waifu) =>(
-               <Card key={waifu.id}>
-               <ImageContainer>
-                 <img src={waifu.img} alt="" />
-               </ImageContainer>
-               <TextContainer>
-                 <h1>{waifu.name}</h1>
-                 <p>{waifu.description}</p>
-                 <SimpleButton>Ver más acerca de {waifu.name}</SimpleButton>
-               </TextContainer>
-             </Card>
-            ))}
-        </CardsContainer> */}
       </>
     );
-  };
+};
