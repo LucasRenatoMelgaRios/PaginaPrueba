@@ -1,11 +1,11 @@
-import { Cards } from "./components/Cards";
-import { HomePage } from "./Pages/HomePage";
+import { MyRouters } from "./routes/Router";
+
 
 function App() {
 
   return (
     <>
-      <HomePage/>
+      <MyRouters/>
     </>
   )
 }

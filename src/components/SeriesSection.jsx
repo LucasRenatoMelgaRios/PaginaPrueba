@@ -8,10 +8,11 @@ import LoadingImage from "./LoadingImage"; // Importa el componente de carga
 // Utiliza lazy para importar el componente LazyImage
 const LazyImage = lazy(() => import("./LazyImage"));
 
+
 export const SeriesSection = () => {
   const [series, setSeries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15; // Número de items por página
+  const itemsPerPage = 15;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,47 +23,42 @@ export const SeriesSection = () => {
     fetchData();
   }, []);
 
-  // Calcular los índices de inicio y fin para la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentSeries = series.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Manejador para cambiar de página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <>
-      <MainContainer>
-        <h1 style={{ fontSize: "1.4vw" }}>Nuevos capítulos</h1>
-        <CardsGridContainer>
-          {currentSeries.map((serie) => (
-            <Card key={serie.id}>
-              {/* Aplicar Suspense al componente LazyImage */}
-              <Suspense fallback={<LoadingImage />}>
-                <LazyImage src={serie.imagen} alt={serie.nombre} />
-              </Suspense>
-              <CardContent>
-                <ContainerFlex>
-                  <Badge tipo={serie.tipo}>{serie.tipo}</Badge>
-                  <Title>{serie.nombre}</Title>
-                </ContainerFlex>
-                <ChapterInfo>Capítulo {serie.capitulo}</ChapterInfo>
-                <ContainerFlex>
-                  <BsSmartwatch />
-                  <TimeAgo>{serie.subido_hace}</TimeAgo>
-                </ContainerFlex>
-              </CardContent>
-            </Card>
-          ))}
-        </CardsGridContainer>
-        <Paginado
-          itemsPerPage={itemsPerPage}
-          totalItems={series.length}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
-      </MainContainer>
-    </>
+    <MainContainer>
+      <TitleSection style={{ fontSize: "clamp(14px, 1.6vw, 18px)", marginBottom: "20px" }}>Nuevos capítulos</TitleSection>
+      <CardsGridContainer>
+        {currentSeries.map((serie) => (
+          <Card key={serie.id}>
+            <Suspense fallback={<LoadingImage />}>
+              <LazyImage src={serie.imagen} alt={serie.nombre} />
+            </Suspense>
+            <CardContent>
+              <ContainerFlex>
+                <Badge tipo={serie.tipo}>{serie.tipo}</Badge>
+                <Title>{serie.nombre}</Title>
+              </ContainerFlex>
+              <ChapterInfo>Capítulo {serie.capitulo}</ChapterInfo>
+              <ContainerFlex>
+                <BsSmartwatch />
+                <TimeAgo>{serie.subido_hace}</TimeAgo>
+              </ContainerFlex>
+            </CardContent>
+          </Card>
+        ))}
+      </CardsGridContainer>
+      <Paginado
+        itemsPerPage={itemsPerPage}
+        totalItems={series.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
+    </MainContainer>
   );
 };
 
@@ -74,9 +70,22 @@ const MainContainer = styled.main`
   margin-top: 50px;
   margin-bottom: 50px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 670px) {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+  @media (max-width: 500px) {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 `;
+
+const TitleSection = styled.h1`
+    margin-bottom: 20px;
+    font-size: clamp(14px, 1.5vw, 18px);
+    padding-left: 20px;
+  
+  `
 
 const ContainerFlex = styled.div`
   display: flex;
@@ -89,7 +98,7 @@ const CardsGridContainer = styled.div`
   gap: 20px; /* Espacio entre los elementos del grid */
   padding: 20px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 868px) {
     grid-template-columns: 1fr; /* Una columna en pantallas más pequeñas */
   }
 `;
@@ -101,11 +110,12 @@ const Card = styled.div`
   transition: transform 0.2s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
-  max-height: 11vh;
+  max-height: 12vh;
   padding: 3px;
   cursor: pointer;
   overflow: hidden;
   border: 1px solid #3f3b3b;
+  min-width: 322px;
 
   &:hover {
     border: 1px solid #ffff;
@@ -117,6 +127,8 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  flex: 1; /* Asegura que use todo el espacio disponible en el contenedor padre */
+  overflow: hidden; /* Asegura que el contenido adicional se oculte */
 `;
 
 const Badge = styled.span`
@@ -135,10 +147,14 @@ const Title = styled.h2`
   font-size: 1em;
   margin: 0 0 5px;
   color: #afafaf;
+  white-space: nowrap; /* Evita el salto de línea */
+  overflow: hidden; /* Esconde el texto que desborda */
+  text-overflow: ellipsis; /* Aplica los puntos suspensivos */
+  width: calc(100% - 60px); /* Ajusta el ancho para permitir espacio al Badge */
 `;
 
 const ChapterInfo = styled.div`
-  font-size: 0.9vw;
+  font-size: clamp(14px, 1.5vw, 18px);
   color: #ffffff;
   font-weight: bold;
 `;

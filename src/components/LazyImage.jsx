@@ -5,7 +5,7 @@ const StyledImage = styled.img`
   width: 25%;
   height: 150px;
   object-fit: cover;
-  border-radius: 1px;
+  border-radius: 5px;
 `;
 
 const LazyImage = ({ src, alt }) => {
