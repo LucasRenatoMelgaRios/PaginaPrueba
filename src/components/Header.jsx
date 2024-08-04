@@ -33,8 +33,8 @@ export const Header = () => {
         <HeaderWrapper>
           <LogoContainer>
             <Link to="/">
-            <img src={marca} alt="Marca" />
-            </Link>  
+              <img src={marca} alt="Marca" />
+            </Link>
           </LogoContainer>
           <NavBar>
             <ul>
@@ -120,9 +120,13 @@ const HeaderWrapper = styled.div`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  gap: 30px;
+  gap: 10px;
   justify-content: space-between;
   padding: 0 20px;
+
+  @media (max-width: 500px) {
+    gap: 5px; /* Reduce the gap for smaller screens */
+  }
 `;
 
 const LogoContainer = styled.div`
@@ -132,8 +136,8 @@ const LogoContainer = styled.div`
   align-items: center;
 
   img {
-    width: clamp(100px, 17vw, 150px);
-    margin-top: 12px;
+    width: clamp(80px, 15vw, 120px);
+    margin-top: 5px;
   }
 `;
 
@@ -141,7 +145,7 @@ const NavBar = styled.nav`
   flex: 3;
   ul {
     display: flex;
-    gap: clamp(10px, 2vw, 30px);
+    gap: clamp(5px, 1.5vw, 20px);
     justify-content: space-around;
     align-items: center;
     padding: 0;
@@ -157,17 +161,23 @@ const NavBar = styled.nav`
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    font-size: clamp(12px, 0.8vw, 18px);
+    font-size: clamp(10px, 0.7vw, 16px);
   }
 `;
 
 const UserContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px; /* Reduced gap for mobile screens */
 
   img {
-    width: clamp(30px, 4vw, 60px);
+    width: clamp(25px, 3vw, 50px);
+  }
+
+  @media (max-width: 500px) {
+    img {
+      display: none; /* Hide the user image on smaller screens to save space */
+    }
   }
 `;
 
@@ -213,4 +223,3 @@ const MobileNav = styled.nav`
     }
   }
 `;
-
