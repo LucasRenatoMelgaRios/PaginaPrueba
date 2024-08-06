@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { SeriesSection } from "../components/SeriesSection";
+import { SeriesSection } from "../components/sections/SeriesSection";
 
 export const HomePage = () => {
  

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useState, useEffect, Suspense, lazy } from "react";
-import { GetSeriesData } from "../services/GetSeriesData";
+import { GetSeriesData } from "../../services/GetSeriesData";
 import { BsSmartwatch } from "react-icons/bs";
-import { Paginado } from "./Paginado";
-import LoadingImage from "./LoadingImage"; // Importa el componente de carga
+import { Paginado } from "../Paginado"
+import LoadingImage from "../LoadingImage"
 
 // Utiliza lazy para importar el componente LazyImage
-const LazyImage = lazy(() => import("./LazyImage"));
+const LazyImage = lazy(() => import("../LazyImage"));
 
 
 export const SeriesSection = () => {
@@ -110,7 +110,7 @@ const Card = styled.div`
   transition: transform 0.2s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
-  max-height: 12vh;
+  max-height: 128px;
   padding: 3px;
   cursor: pointer;
   overflow: hidden;

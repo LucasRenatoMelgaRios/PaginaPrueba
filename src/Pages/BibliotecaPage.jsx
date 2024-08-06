@@ -1,3 +1,16 @@
+import styled from "styled-components";
+import { BibliotecaSection } from "../components/sections/BibliotecaSection";
+
 export const BibliotecaPage = () => {
-    return <h1>Biblioteca Page</h1>
+    return (
+        <>
+         <MainContainer>
+            <BibliotecaSection/>
+         </MainContainer>
+        </>
+    )
 }
+
+const MainContainer = styled.main`
+  width: 100%;
+`;

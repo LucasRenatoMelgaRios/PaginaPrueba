@@ -1,89 +1,96 @@
 import styled from "styled-components"
-import { useState, useEffect } from "react";
-import { GetSeriesData } from "../services/GetSeriesData";
-import { BsSmartwatch } from "react-icons/bs";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
 export const Paginado = ({ itemsPerPage, totalItems, paginate, currentPage }) => {
-    const pageNumbers = [];
-    const maxPageNumber = Math.ceil(totalItems / itemsPerPage);
-    const delta = 2; // Número de páginas alrededor de la actual para mostrar
-  
-    // Generar números de página
-    for (let i = 1; i <= maxPageNumber; i++) {
-      pageNumbers.push(i);
+  const pageNumbers = [];
+  const maxPageNumber = Math.ceil(totalItems / itemsPerPage);
+  const delta = 2; // Número de páginas alrededor de la actual para mostrar
+
+  // Generar números de página
+  for (let i = 1; i <= maxPageNumber; i++) {
+    pageNumbers.push(i);
+  }
+
+  // Función para generar el rango de páginas con puntos suspensivos
+  const getPageNumbersToShow = () => {
+    if (maxPageNumber <= 5) {
+      return pageNumbers;
     }
-  
-    // Función para generar el rango de páginas con puntos suspensivos
-    const getPageNumbersToShow = () => {
-      if (maxPageNumber <= 5) {
-        return pageNumbers;
-      }
-  
-      const startPage = Math.max(currentPage - delta, 1);
-      const endPage = Math.min(currentPage + delta, maxPageNumber);
-  
-      let pages = pageNumbers.slice(startPage - 1, endPage);
-  
-      if (startPage > 1) {
-        pages = [1, '...'].concat(pages);
-      }
-  
-      if (endPage < maxPageNumber) {
-        pages = pages.concat(['...', maxPageNumber]);
-      }
-  
-      return pages;
-    };
-  
-    const pagesToShow = getPageNumbersToShow();
-  
-    return (
-      <Navegation>
-        <List>
-          {/* Botón de retroceso */}
-          <Element>
-            <a
-              href="#"
-              onClick={() => paginate(Math.max(currentPage - 1, 1))}
-            >
-              <IoIosArrowBack />
-            </a>
-          </Element>
-  
-          {/* Números de página con lógica de puntos suspensivos */}
-          {pagesToShow.map((number, index) => (
-            <Element key={index}>
-              {number === '...' ? (
-                <span className="ellipsis">...</span>
-              ) : (
-                <a
-                  href="#"
-                  onClick={() => paginate(number)}
-                  className={number === currentPage ? "active" : ""}
-                >
-                  {number}
-                </a>
-              )}
-            </Element>
-          ))}
-  
-          {/* Botón de avance */}
-          <Element>
-            <a
-              href="#"
-              onClick={() =>
-                paginate(Math.min(currentPage + 1, maxPageNumber))
-              }
-            >
-              <IoIosArrowForward />
-            </a>
-          </Element>
-        </List>
-      </Navegation>
-    );
+
+    const startPage = Math.max(currentPage - delta, 1);
+    const endPage = Math.min(currentPage + delta, maxPageNumber);
+
+    let pages = pageNumbers.slice(startPage - 1, endPage);
+
+    if (startPage > 1) {
+      pages = [1, '...'].concat(pages);
+    }
+
+    if (endPage < maxPageNumber) {
+      pages = pages.concat(['...', maxPageNumber]);
+    }
+
+    return pages;
   };
+
+  const pagesToShow = getPageNumbersToShow();
+
+  // Función para realizar el scroll suave hacia el tope de la página
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handlePaginate = (pageNumber) => {
+    paginate(pageNumber);
+    scrollToTop(); // Llamamos a la función scrollToTop aquí
+  };
+
+  return (
+    <Navegation>
+      <List>
+        {/* Botón de retroceso */}
+        <Element>
+          <button
+            onClick={() => handlePaginate(Math.max(currentPage - 1, 1))}
+          >
+            <IoIosArrowBack />
+          </button>
+        </Element>
+
+        {/* Números de página con lógica de puntos suspensivos */}
+        {pagesToShow.map((number, index) => (
+          <Element key={index}>
+            {number === '...' ? (
+              <span className="ellipsis">...</span>
+            ) : (
+              <button
+                onClick={() => handlePaginate(number)}
+                className={number === currentPage ? "active" : ""}
+              >
+                {number}
+              </button>
+            )}
+          </Element>
+        ))}
+
+        {/* Botón de avance */}
+        <Element>
+          <button
+            onClick={() =>
+              handlePaginate(Math.min(currentPage + 1, maxPageNumber))
+            }
+          >
+            <IoIosArrowForward />
+          </button>
+        </Element>
+      </List>
+    </Navegation>
+  );
+};
   
   const Navegation = styled.nav`
     width: 100%;
@@ -108,7 +115,7 @@ export const Paginado = ({ itemsPerPage, totalItems, paginate, currentPage }) =>
   `;
   
   const Element = styled.li`
-    a {
+    button {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -125,6 +132,7 @@ export const Paginado = ({ itemsPerPage, totalItems, paginate, currentPage }) =>
       transition: background-color 0.3s;
       border: 1px solid #2b2727;
       cursor: pointer;
+      background: none;
   
       &:hover {
         border: 1px solid #f5f5f5;
@@ -150,7 +158,7 @@ export const Paginado = ({ itemsPerPage, totalItems, paginate, currentPage }) =>
     }
   
     @media (max-width: 1600px) {
-      a {
+      button {
         font-size: clamp(14px, 2vw, 18px);
       }
     }
