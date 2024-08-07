@@ -7,10 +7,11 @@ import { FavoritosFeedPage } from '../Pages/FavoritosFeedPage';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { InfoSeriePage } from "../Pages/InfoSeriePage";
+import { InfoObraPage } from "../Pages/InfoObraPage"; // Nueva página para la obra
 import { useState, useEffect } from "react";
-import styled from "styled-components"; // Asegúrate de importar styled-components si usas estilos aquí
+import styled from "styled-components";
 
-export const MyRouters = ({ selectedSerie, setSelectedSerie }) => {
+export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSelectedObra }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -55,12 +56,13 @@ export const MyRouters = ({ selectedSerie, setSelectedSerie }) => {
         </MobileNav>
       )}
       <Routes>
-        <Route path="/" element={<HomePage setSelectedSerie={setSelectedSerie} />} /> {/* Asegúrate de pasar setSelectedSerie aquí */}
-        <Route path="/biblioteca" element={<BibliotecaPage />} />
+        <Route path="/" element={<HomePage setSelectedSerie={setSelectedSerie} />} />
+        <Route path="/biblioteca" element={<BibliotecaPage setSelectedObra={setSelectedObra} />} /> {/* Pasa setSelectedObra */}
         <Route path="/clasificacion" element={<ClasificacionPage />} />
         <Route path="/grupos" element={<GruposPage />} />
         <Route path="/favoritos-feed" element={<FavoritosFeedPage />} />
-        <Route path="/series-info" element={<InfoSeriePage selectedSerie={selectedSerie} />} /> {/* Pasa selectedSerie aquí */}
+        <Route path="/series-info" element={<InfoSeriePage selectedSerie={selectedSerie} />} />
+        <Route path="/obra-info" element={<InfoObraPage selectedObra={selectedObra} />} /> {/* Nueva ruta para la página de información de la obra */}
       </Routes>
       <Footer />
     </HashRouter>

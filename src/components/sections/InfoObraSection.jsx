@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import { FaArrowDown, FaArrowUp, FaRegHeart } from "react-icons/fa"; // Importa los iconos
-import { Paginado } from "../Paginado";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Paginado } from "../Paginado"; // Asumimos que tienes un componente Paginado
 
-export const InfoSerieSection = ({ selectedSerie }) => {
+export const InfoObraSection = ({ selectedObra }) => {
   const [expanded, setExpanded] = useState(false); // Estado para controlar si la descripción está expandida
   const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
   const [isAscending, setIsAscending] = useState(true); // Estado para el orden ascendente/descendente
@@ -19,19 +19,19 @@ export const InfoSerieSection = ({ selectedSerie }) => {
     setIsAscending(!isAscending); // Cambia el orden ascendente/descendente
   };
 
-  // Verifica si la serie seleccionada está disponible
-  if (!selectedSerie) {
+  // Verifica si la obra seleccionada está disponible
+  if (!selectedObra) {
     // Redirigir a la página de inicio si no hay obra seleccionada
     navigate("/");
     return null; // Asegúrate de devolver null para no renderizar el componente
   }
 
   // Generar capítulos simulados
-  const capitulos = Array.from({ length: selectedSerie.capitulo }, (_, i) => ({
+  const capitulos = Array.from({ length: selectedObra.capitulos }, (_, i) => ({
     numero: i + 1,
     fecha: "Hace 10 meses", // Usar una fecha ficticia
     likes: Math.floor(Math.random() * 20) + 1, // Generar un número aleatorio de likes
-    imagen: selectedSerie.imagen, // Usar la imagen de la serie
+    imagen: selectedObra.avatar, // Usar la imagen de la obra
   }));
 
   // Ordenar capítulos según el estado isAscending
@@ -52,23 +52,18 @@ export const InfoSerieSection = ({ selectedSerie }) => {
 
   return (
     <MainContainer>
-      <SeriesContainer>
+      <ObraContainer>
         <Card expanded={expanded}>
           <Overlay>
-            <Category>{selectedSerie.tipo}</Category>
+            <Category>{selectedObra.tipo}</Category>
             <Category>En Curso</Category>
           </Overlay>
           <ImageContainer>
-            <img src={selectedSerie.imagen} alt={selectedSerie.nombre} />
+            <img src={selectedObra.avatar} alt={selectedObra.nombre} />
           </ImageContainer>
           <ContentContainer expanded={expanded}>
-            <Title>{selectedSerie.nombre}</Title> {/* Mostrar el nombre de la serie */}
-            <Text expanded={expanded}>
-              Yura, que sufre de fobia al contacto físico, solo está con su
-              amigo de la infancia Hae-won, pero cuando conoce a Go In woo,
-              Kwon Mina y otras personas, aprende nuevas emociones y construye
-              relaciones verdaderas.
-            </Text>
+            <Title>{selectedObra.nombre}</Title> {/* Mostrar el nombre de la obra */}
+            <Text expanded={expanded}>{selectedObra.descripcion}</Text>
             <Button onClick={handleToggleExpand}>
               {expanded ? (
                 <>
@@ -91,7 +86,7 @@ export const InfoSerieSection = ({ selectedSerie }) => {
         {/* Sección de capítulos */}
         <CapitulosContainer>
           <CapitulosHeader>
-            <CapitulosTitle>{selectedSerie.capitulo} Capítulos</CapitulosTitle>
+            <CapitulosTitle>{selectedObra.capitulo} Capítulos</CapitulosTitle>
             <SortButton onClick={toggleSortOrder}>
               {isAscending ? "Ascendente" : "Descendente"}{" "}
               <SortIcon isAscending={isAscending} />
@@ -124,7 +119,7 @@ export const InfoSerieSection = ({ selectedSerie }) => {
             currentPage={currentPage}
           />
         </CapitulosContainer>
-      </SeriesContainer>
+      </ObraContainer>
     </MainContainer>
   );
 };
@@ -138,7 +133,6 @@ const MainContainer = styled.main`
   margin-bottom: 50px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   @media (max-width: 2100px) {
     padding-left: 50px;
@@ -155,7 +149,7 @@ const MainContainer = styled.main`
   }
 `;
 
-const SeriesContainer = styled.div`
+const ObraContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 50px;
@@ -319,8 +313,6 @@ const CapituloGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Dos columnas para pantallas grandes */
   gap: 10px;
-    max-width: 600px; /* Limitar el ancho del grid */
-
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr; /* Una columna para pantallas pequeñas */

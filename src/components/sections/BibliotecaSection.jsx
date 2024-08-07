@@ -5,14 +5,13 @@ import { Paginado } from "../Paginado";
 import { GiMountains } from "react-icons/gi";
 import { PiBookOpenTextLight } from "react-icons/pi";
 import { CgTag } from "react-icons/cg";
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 
-
-// Utiliza lazy para importar el componente LazyImage
-
-export const BibliotecaSection = () => {
+export const BibliotecaSection = ({ setSelectedObra }) => { // Recibe setSelectedObra
     const [obras, setObras] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
+    const navigate = useNavigate(); // Crea una instancia de useNavigate
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,12 +28,17 @@ export const BibliotecaSection = () => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const handleCardClick = (obra) => {
+        setSelectedObra(obra); // Guarda la obra seleccionada
+        navigate('/obra-info'); // Navega a la página de información de la obra
+    };
+
     return (
         <MainContainer>
             <TitleSection>Últimas series</TitleSection>
             <CardsGridContainer>
                 {currentObras.map((obra) => (
-                    <Card key={obra.id}>
+                    <Card key={obra.id} onClick={() => handleCardClick(obra)}>
                         <CardContainer>
                             <img src={obra.avatar} alt="" />
                         </CardContainer>
@@ -46,7 +50,8 @@ export const BibliotecaSection = () => {
                                 </InfoElement>
                                 <InfoElement>
                                     <PiBookOpenTextLight />
-                                    {obra.capitulos} capitulos</InfoElement>
+                                    {obra.capitulos} capitulos
+                                </InfoElement>
                                 <InfoElement>
                                     <CgTag />
                                     {obra.tipo}
