@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { SeriesSection } from "../components/sections/SeriesSection";
 
-export const HomePage = () => {
- 
+export const HomePage = ({ setSelectedSerie }) => {
   return (
     <MainContainer>
-      <SeriesSection />
+      <SeriesSection setSelectedSerie={setSelectedSerie} />
     </MainContainer>
   );
 };
@@ -15,5 +14,3 @@ export const HomePage = () => {
 const MainContainer = styled.main`
   width: 100%;
 `;
-
-

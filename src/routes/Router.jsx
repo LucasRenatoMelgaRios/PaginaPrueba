@@ -1,41 +1,39 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
-import {HomePage} from '../Pages/HomePage';
-import {BibliotecaPage} from '../Pages/BibliotecaPage';
-import {ClasificacionPage} from '../Pages/ClasificacionPage'
-import {GruposPage} from '../Pages/GruposPage';
-import {FavoritosFeedPage} from '../Pages/FavoritosFeedPage';
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
+import { HomePage } from '../Pages/HomePage';
+import { BibliotecaPage } from '../Pages/BibliotecaPage';
+import { ClasificacionPage } from '../Pages/ClasificacionPage';
+import { GruposPage } from '../Pages/GruposPage';
+import { FavoritosFeedPage } from '../Pages/FavoritosFeedPage';
 import { Header } from '../components/Header';
-import { useState, useEffect } from "react";
 import { Footer } from '../components/Footer';
+import { InfoSeriePage } from "../Pages/InfoSeriePage";
+import { useState, useEffect } from "react";
+import styled from "styled-components"; // Asegúrate de importar styled-components si usas estilos aquí
 
+export const MyRouters = ({ selectedSerie, setSelectedSerie }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-export const MyRouters = () => {
-    const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => {
+    setMenuOpen((prevMenuOpen) => !prevMenuOpen);
+  };
 
-    const toggleMenu = () => {
-      console.log("menu abierto");
-      console.log(menuOpen);
-      setMenuOpen((menuOpen) => !menuOpen);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 740) {
+        setMenuOpen(false);
+      }
     };
-  
-    //para cerrar el menu mobile si el ancho de pantalla regresa a ser 740
-    useEffect(() => {
-      const handleResize = () => {
-        if (window.innerWidth > 740) {
-          setMenuOpen(false);
-        }
-      };
-  
-      window.addEventListener("resize", handleResize);
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
-  
-    return (
-      <HashRouter>
-        <Header/>
-        {menuOpen && (
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <HashRouter>
+      <Header />
+      {menuOpen && (
         <MobileNav>
           <ul>
             <li>
@@ -56,14 +54,42 @@ export const MyRouters = () => {
           </ul>
         </MobileNav>
       )}
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/biblioteca" element={<BibliotecaPage />} />
-          <Route path="/clasificacion" element={<ClasificacionPage />} />
-          <Route path="/grupos" element={<GruposPage />} />
-          <Route path="/favoritos-feed" element={<FavoritosFeedPage />} />
-        </Routes>
-        <Footer/>
-      </HashRouter>
-    );
-  };
+      <Routes>
+        <Route path="/" element={<HomePage setSelectedSerie={setSelectedSerie} />} /> {/* Asegúrate de pasar setSelectedSerie aquí */}
+        <Route path="/biblioteca" element={<BibliotecaPage />} />
+        <Route path="/clasificacion" element={<ClasificacionPage />} />
+        <Route path="/grupos" element={<GruposPage />} />
+        <Route path="/favoritos-feed" element={<FavoritosFeedPage />} />
+        <Route path="/series-info" element={<InfoSeriePage selectedSerie={selectedSerie} />} /> {/* Pasa selectedSerie aquí */}
+      </Routes>
+      <Footer />
+    </HashRouter>
+  );
+};
+// Estilo para la navegación móvil
+const MobileNav = styled.nav`
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  li {
+    margin-bottom: 10px;
+  }
+  a {
+    color: white;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;

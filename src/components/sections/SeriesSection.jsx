@@ -2,17 +2,18 @@ import styled from "styled-components";
 import { useState, useEffect, Suspense, lazy } from "react";
 import { GetSeriesData } from "../../services/GetSeriesData";
 import { BsSmartwatch } from "react-icons/bs";
-import { Paginado } from "../Paginado"
-import LoadingImage from "../LoadingImage"
+import { Paginado } from "../Paginado";
+import LoadingImage from "../LoadingImage";
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 
 // Utiliza lazy para importar el componente LazyImage
 const LazyImage = lazy(() => import("../LazyImage"));
 
-
-export const SeriesSection = () => {
+export const SeriesSection = ({ setSelectedSerie }) => {
   const [series, setSeries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
+  const navigate = useNavigate(); // Crea una instancia de useNavigate
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,12 +30,17 @@ export const SeriesSection = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleCardClick = (serie) => {
+    setSelectedSerie(serie); // Guarda la serie seleccionada
+    navigate('/series-info'); // Navega a la página de información de la serie
+  };
+
   return (
     <MainContainer>
       <TitleSection style={{ fontSize: "clamp(14px, 1.6vw, 18px)", marginBottom: "20px" }}>Nuevos capítulos</TitleSection>
       <CardsGridContainer>
         {currentSeries.map((serie) => (
-          <Card key={serie.id}>
+          <Card key={serie.id} onClick={() => handleCardClick(serie)}>
             <Suspense fallback={<LoadingImage />}>
               <LazyImage src={serie.imagen} alt={serie.nombre} />
             </Suspense>
@@ -61,7 +67,6 @@ export const SeriesSection = () => {
     </MainContainer>
   );
 };
-
 // Estilos CSS
 const MainContainer = styled.main`
   width: 100%;
@@ -84,8 +89,7 @@ const TitleSection = styled.h1`
     margin-bottom: 20px;
     font-size: clamp(14px, 1.5vw, 18px);
     padding-left: 20px;
-  
-  `
+`;
 
 const ContainerFlex = styled.div`
   display: flex;
@@ -163,3 +167,4 @@ const TimeAgo = styled.div`
   font-size: 0.8em;
   color: #d4d4d4;
 `;
+

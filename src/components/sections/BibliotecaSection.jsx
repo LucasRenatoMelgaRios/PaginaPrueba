@@ -108,33 +108,31 @@ const ContainerFlex = styled.div`
 
 const CardsGridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Tres columnas de igual tamaño */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajuste automático de columnas */
   gap: 10px;
   padding: 20px;
-  width: 80%;
+  width: 100%; /* Ancho máximo permitido */
 
   @media (max-width: 2268px) {
     width: 90%;
-
   }
 
   @media (max-width: 2000px) {
-    grid-template-columns: repeat(4, 1fr); /* Dos columnas en pantallas más pequeñas */
+    grid-template-columns: repeat(4, 1fr);
   }
 
   @media (max-width: 1400px) {
-    grid-template-columns: repeat(3, 1fr); /* Dos columnas en pantallas más pequeñas */
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media (max-width: 868px) {
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas en pantallas más pequeñas */
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media (max-width: 580px) {
-    grid-template-columns: 1fr; /* Una columna en pantallas más pequeñas */
+    grid-template-columns: 1fr;
   }
 `;
-
 const CardContainer = styled.div`
     width: 100%;
 
