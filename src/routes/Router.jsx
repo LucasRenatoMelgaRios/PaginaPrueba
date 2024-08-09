@@ -7,11 +7,12 @@ import { FavoritosFeedPage } from '../Pages/FavoritosFeedPage';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { InfoSeriePage } from "../Pages/InfoSeriePage";
-import { InfoObraPage } from "../Pages/InfoObraPage"; // Nueva página para la obra
+import { InfoObraPage } from "../Pages/InfoObraPage";
+import { ResultadosPage } from '../Pages/ResultadosPage';
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSelectedObra }) => {
+export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSelectedObra, searchQuery, setSearchQuery }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -31,9 +32,11 @@ export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSe
     };
   }, []);
 
+  console.log("MyRouters searchQuery state:", searchQuery); // Verifica el estado actual de searchQuery
+
   return (
     <HashRouter>
-      <Header />
+      <Header setSearchQuery={setSearchQuery} /> {/* Pasar setSearchQuery al Header */}
       {menuOpen && (
         <MobileNav>
           <ul>
@@ -57,12 +60,13 @@ export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSe
       )}
       <Routes>
         <Route path="/" element={<HomePage setSelectedSerie={setSelectedSerie} />} />
-        <Route path="/biblioteca" element={<BibliotecaPage setSelectedObra={setSelectedObra} />} /> {/* Pasa setSelectedObra */}
-        <Route path="/clasificacion" element={<ClasificacionPage />} />
+        <Route path="/biblioteca" element={<BibliotecaPage setSelectedObra={setSelectedObra} />} />
+        <Route path="/clasificacion" element={<ResultadosPage searchQuery={searchQuery} />} />
         <Route path="/grupos" element={<GruposPage />} />
         <Route path="/favoritos-feed" element={<FavoritosFeedPage />} />
         <Route path="/series-info" element={<InfoSeriePage selectedSerie={selectedSerie} />} />
-        <Route path="/obra-info" element={<InfoObraPage selectedObra={selectedObra} />} /> {/* Nueva ruta para la página de información de la obra */}
+        <Route path="/obra-info" element={<InfoObraPage selectedObra={selectedObra} />} />
+        <Route path="/resultados" element={<ResultadosPage searchQuery={searchQuery} setSelectedObra={setSelectedObra} />} />
       </Routes>
       <Footer />
     </HashRouter>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const SearchBar = styled.div`
   display: flex;
@@ -39,11 +40,37 @@ const SearchIcon = styled.span`
   }
 `;
 
-export const Buscador = () => {
+export const Buscador = ({ setSearchQuery }) => {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearchChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    console.log("Submitting search:", query); // Asegúrate de que 'query' tenga el valor esperado
+    setSearchQuery(query); 
+    navigate('/resultados'); 
+  };
+  
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit();
+    }
+  };
+
   return (
     <SearchBar>
-      <SearchInput type="text" placeholder="Buscar..." />
-      <SearchIcon>
+      <SearchInput 
+        type="text" 
+        placeholder="Buscar..." 
+        value={query}
+        onChange={handleSearchChange}
+        onKeyDown={handleKeyDown}
+      />
+      <SearchIcon onClick={handleSearchSubmit}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"

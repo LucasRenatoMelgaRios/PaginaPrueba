@@ -1,13 +1,12 @@
-// src/components/Header.jsx
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import marca from "../assets/nombrePagina.png"; // Adjust path if necessary
-import user from "../assets/userImage.png"; // Adjust path if necessary
-import { Buscador } from "./Buscador"; // Adjust path if necessary
+import marca from "../assets/nombrePagina.png";
+import user from "../assets/userImage.png";
+import { Buscador } from "./Buscador";
 import { FaBars } from "react-icons/fa";
 
-export const Header = () => {
+export const Header = ({ setSearchQuery }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -26,6 +25,9 @@ export const Header = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  console.log("Header received setSearchQuery:", setSearchQuery); // Verifica que se recibe correctamente
+
 
   return (
     <>
@@ -56,7 +58,7 @@ export const Header = () => {
             </ul>
           </NavBar>
           <UserContainer>
-            <Buscador />
+            <Buscador setSearchQuery={setSearchQuery} /> {/* Pasa setSearchQuery al Buscador */}
             <img src={user} alt="Usuario" />
             <HamburgerIcon onClick={toggleMenu}>
               <FaBars size={24} color="#fff" />

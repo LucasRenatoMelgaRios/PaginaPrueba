@@ -117,7 +117,6 @@ const CardsGridContainer = styled.div`
   gap: 10px;
   padding: 20px;
   width: 100%; /* Ancho máximo permitido */
-
   @media (max-width: 2268px) {
     width: 90%;
   }
@@ -160,7 +159,6 @@ const Card = styled.div`
   padding: 3px;
   cursor: pointer;
   overflow: hidden;
-  width: 100%;
   border: 1px solid #3f3b3b;
   &:hover {
     border: 1px solid #ffff;
