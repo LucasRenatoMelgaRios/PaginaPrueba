@@ -8,117 +8,123 @@ import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { Paginado } from "../Paginado";
 import { FiFilter } from "react-icons/fi"; // Importa el ícono de filtro
 
-export const ResultadosSection = ({ searchQuery, setSelectedObra }) => {
-    const [obras, setObras] = useState([]);
-    const [filteredObras, setFilteredObras] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchInput, setSearchInput] = useState(""); // Estado para manejar el input del buscador
-    const itemsPerPage = 15;
-    const navigate = useNavigate(); // Crea una instancia de useNavigate
+export const ResultadosSection = ({ searchQuery, setSelectedObra, setSearchQuery }) => {
+  const [obras, setObras] = useState([]);
+  const [filteredObras, setFilteredObras] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+  const navigate = useNavigate(); // Crea una instancia de useNavigate
 
-    useEffect(() => {
-        console.log("Listando obras");
-        const fetchData = async () => {
-            const data = await GetBibliotecaData();
-            setObras(data);
-            console.log("Obras cargadas:", data);
-        };
-    
-        fetchData();
-    }, []);
+  useEffect(() => {
+      console.log("Listando obras");
+      const fetchData = async () => {
+          const data = await GetBibliotecaData();
+          setObras(data);
+          console.log("Obras cargadas:", data);
+      };
+  
+      fetchData();
+  }, []);
 
-    useEffect(() => {
-        console.log("Filtrando obras con query:", searchQuery);
-        if (searchQuery.trim() !== "") {
-            const filteredResults = obras.filter((obra) => {
-                const obraNombreLower = obra.nombre.toLowerCase().trim();
-                const searchQueryLower = searchQuery.toLowerCase().trim();
-                console.log(`Comparando: ${obraNombreLower} con ${searchQueryLower}`);
-                const match = obraNombreLower.includes(searchQueryLower);
-                console.log(`¿Coincide? ${match}`);
-                return match;
-            });
-            setFilteredObras(filteredResults);
-            console.log("Resultados filtrados:", filteredResults);
-        } else {
-            setFilteredObras(obras);
-        }
-    }, [obras, searchQuery]);
+  useEffect(() => {
+      console.log("Filtrando obras con query:", searchQuery);
+      if (searchQuery.trim() !== "") {
+          const filteredResults = obras.filter((obra) => {
+              const obraNombreLower = obra.nombre.toLowerCase().trim();
+              const searchQueryLower = searchQuery.toLowerCase().trim();
+              const match = obraNombreLower.includes(searchQueryLower);
+              return match;
+          });
+          setFilteredObras(filteredResults);
+          console.log("Resultados filtrados:", filteredResults);
+      } else {
+          setFilteredObras(obras);
+      }
+  }, [obras, searchQuery]);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentObras = filteredObras.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentObras = filteredObras.slice(indexOfFirstItem, indexOfLastItem);
 
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    const handleCardClick = (obra) => {
-        setSelectedObra(obra); // Guarda la obra seleccionada
-        navigate('/obra-info'); // Navega a la página de información de la obra
-    };
+  const handleCardClick = (obra) => {
+      setSelectedObra(obra); // Guarda la obra seleccionada
+      navigate('/obra-info'); // Navega a la página de información de la obra
+  };
 
-    const handleSearchInputChange = (e) => {
-        setSearchInput(e.target.value);
-        // Aquí puedes agregar lógica para filtrar las obras mientras se escribe
-    };
+  const handleSearchChange = (e) => {
+      setSearchQuery(e.target.value);
+  };
 
-    return (
-        <MainContainer>
-            <FirstPartContainer>
-                <h1>Biblioteca</h1>
-                <Parrafo>Filtros</Parrafo>
-                <SearchBarContainer>
-                    <SearchInput
-                        type="text"
-                        placeholder="Buscar..."
-                        value={searchInput}
-                        onChange={handleSearchInputChange}
-                    />
-                    <SearchIcon>
-                        <FiFilter size={24} />
-                    </SearchIcon>
-                </SearchBarContainer>
-            </FirstPartContainer>
+  const handleSearchSubmit = () => {
+      console.log("Submitting search:", searchQuery); // Asegúrate de que 'searchQuery' tenga el valor esperado
+  };
 
-            {filteredObras.length > 0 ? (
-                <>
-                    <Parrafo>{filteredObras.length} Obras</Parrafo>
-                    <CardsGridContainer>
-                        {currentObras.map((obra) => (
-                            <Card key={obra.id} onClick={() => handleCardClick(obra)}>
-                                <CardContainer>
-                                    <img src={obra.avatar} alt={obra.nombre} />
-                                </CardContainer>
-                                <CardContent>
-                                    <ContainerFlex>
-                                        <InfoElement estado={obra.estado}>
-                                            <GiMountains /> {obra.estado}
-                                        </InfoElement>
-                                        <InfoElement>
-                                            <PiBookOpenTextLight /> {obra.capitulos} capítulos
-                                        </InfoElement>
-                                        <InfoElement>
-                                            <CgTag /> {obra.tipo}
-                                        </InfoElement>
-                                    </ContainerFlex>
-                                    <Title>{obra.nombre}</Title>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </CardsGridContainer>
-                    <Paginado
-                        itemsPerPage={itemsPerPage}
-                        totalItems={filteredObras.length}
-                        paginate={paginate}
-                        currentPage={currentPage}
-                    />
-                </>
-            ) : (
-                <p>No se encontraron resultados para "{searchQuery}".</p>
-            )}
-        </MainContainer>
-    );
+  const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+          handleSearchSubmit();
+      }
+  };
+
+  return (
+      <MainContainer>
+          <FirstPartContainer>
+              <h1>Biblioteca</h1>
+              <Parrafo>Filtros</Parrafo>
+              <SearchBarContainer>
+                  <SearchInput
+                      type="text"
+                      placeholder="Buscar..."
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      onKeyDown={handleKeyDown}
+                  />
+                  <SearchIcon onClick={handleSearchSubmit}>
+                      <FiFilter size={24} />
+                  </SearchIcon>
+              </SearchBarContainer>
+          </FirstPartContainer>
+
+          {filteredObras.length > 0 ? (
+              <>
+                  <Parrafo>{filteredObras.length} Obras</Parrafo>
+                  <CardsGridContainer>
+                      {currentObras.map((obra) => (
+                          <Card key={obra.id} onClick={() => handleCardClick(obra)}>
+                              <CardContainer>
+                                  <img src={obra.avatar} alt={obra.nombre} />
+                              </CardContainer>
+                              <CardContent>
+                                  <ContainerFlex>
+                                      <InfoElement estado={obra.estado}>
+                                          <GiMountains /> {obra.estado}
+                                      </InfoElement>
+                                      <InfoElement>
+                                          <PiBookOpenTextLight /> {obra.capitulos} capítulos
+                                      </InfoElement>
+                                      <InfoElement>
+                                          <CgTag /> {obra.tipo}
+                                      </InfoElement>
+                                  </ContainerFlex>
+                                  <Title>{obra.nombre}</Title>
+                              </CardContent>
+                          </Card>
+                      ))}
+                  </CardsGridContainer>
+                  <Paginado
+                      itemsPerPage={itemsPerPage}
+                      totalItems={filteredObras.length}
+                      paginate={paginate}
+                      currentPage={currentPage}
+                  />
+              </>
+          ) : (
+              <p>No se encontraron resultados para "{searchQuery}".</p>
+          )}
+      </MainContainer>
+  );
 };
-
 // Estilos CSS
 const MainContainer = styled.main`
   width: 100%;

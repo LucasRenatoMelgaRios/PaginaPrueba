@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { ResultadosSection } from "../components/sections/ResultadosSection";
 
-export const ResultadosPage = ({ searchQuery, setSelectedObra }) => { // Recibe searchQuery como prop directamente
+export const ResultadosPage = ({ searchQuery, setSearchQuery, setSelectedObra }) => { // Recibe searchQuery como prop directamente
 
   return (
     <MainContainer>
-        <ResultadosSection searchQuery={searchQuery} setSelectedObra={setSelectedObra}/>
+        <ResultadosSection searchQuery={searchQuery} setSelectedObra={setSelectedObra} setSearchQuery={setSearchQuery}/>
     </MainContainer>
   );
 };

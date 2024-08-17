@@ -61,12 +61,12 @@ export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSe
       <Routes>
         <Route path="/" element={<HomePage setSelectedSerie={setSelectedSerie} />} />
         <Route path="/biblioteca" element={<BibliotecaPage setSelectedObra={setSelectedObra} />} />
-        <Route path="/clasificacion" element={<ResultadosPage searchQuery={searchQuery} />} />
+        <Route path="/clasificacion" element={<ClasificacionPage searchQuery={searchQuery} />} />
         <Route path="/grupos" element={<GruposPage />} />
         <Route path="/favoritos-feed" element={<FavoritosFeedPage />} />
         <Route path="/series-info" element={<InfoSeriePage selectedSerie={selectedSerie} />} />
         <Route path="/obra-info" element={<InfoObraPage selectedObra={selectedObra} />} />
-        <Route path="/resultados" element={<ResultadosPage searchQuery={searchQuery} setSelectedObra={setSelectedObra} />} />
+        <Route path="/resultados" element={<ResultadosPage searchQuery={searchQuery} setSearchQuery={setSearchQuery} setSelectedObra={setSelectedObra} />} />
       </Routes>
       <Footer />
     </HashRouter>

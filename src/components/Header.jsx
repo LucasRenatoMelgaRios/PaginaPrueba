@@ -41,24 +41,21 @@ export const Header = ({ setSearchQuery }) => {
           <NavBar>
             <ul>
               <li>
-                <Link to="/">Inicio</Link>
+                <StyledLink to="/">Inicio</StyledLink>
               </li>
               <li>
-                <Link to="/biblioteca">Biblioteca</Link>
+                <StyledLink to="/biblioteca">Biblioteca</StyledLink>
               </li>
               <li>
-                <Link to="/clasificacion">Clasificación</Link>
+                <StyledLink to="/clasificacion">Clasificación</StyledLink>
               </li>
               <li>
-                <Link to="/grupos">Grupos</Link>
-              </li>
-              <li>
-                <Link to="/favoritos-feed">Favoritos Feed</Link>
+                <StyledLink to="/grupos">Grupos</StyledLink>
               </li>
             </ul>
           </NavBar>
           <UserContainer>
-            <Buscador setSearchQuery={setSearchQuery} /> {/* Pasa setSearchQuery al Buscador */}
+            <Buscador setSearchQuery={setSearchQuery} />
             <img src={user} alt="Usuario" />
             <HamburgerIcon onClick={toggleMenu}>
               <FaBars size={24} color="#fff" />
@@ -88,11 +85,6 @@ export const Header = ({ setSearchQuery }) => {
             <li>
               <Link to="/grupos" onClick={toggleMenu}>
                 Grupos
-              </Link>
-            </li>
-            <li>
-              <Link to="/favoritos-feed" onClick={toggleMenu}>
-                Favoritos Feed
               </Link>
             </li>
           </ul>
@@ -145,6 +137,7 @@ const LogoContainer = styled.div`
 
 const NavBar = styled.nav`
   flex: 3;
+  margin-right: 200px;
   ul {
     display: flex;
     gap: clamp(5px, 1.5vw, 20px);
@@ -154,8 +147,7 @@ const NavBar = styled.nav`
     margin: 0;
     list-style: none;
 
-    @media (max-width: 740px) {
-      display: none; /* Hide on smaller screens */
+    @media (max-width: 865px) {
     }
   }
 
@@ -164,7 +156,9 @@ const NavBar = styled.nav`
     text-decoration: none;
     font-weight: bold;
     font-size: clamp(10px, 0.7vw, 16px);
+    
   }
+
 `;
 
 const UserContainer = styled.div`
@@ -187,7 +181,7 @@ const HamburgerIcon = styled.div`
   display: none;
   cursor: pointer;
 
-  @media (max-width: 740px) {
+  @media (max-width: 865px) {
     display: block;
   }
 `;
@@ -223,5 +217,20 @@ const MobileNav = styled.nav`
       font-weight: bold;
       font-size: 18px; /* Larger font size for mobile menu */
     }
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: clamp(22px, 0.7vw, 26px);
+  padding: 5px 15px;
+  border: 1px solid #2b2727;
+  border-radius: 20px;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid #f5f5f5;
   }
 `;

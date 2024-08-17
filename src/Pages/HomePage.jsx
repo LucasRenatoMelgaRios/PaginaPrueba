@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { SeriesSection } from "../components/sections/SeriesSection";
 
 export const HomePage = ({ setSelectedSerie }) => {
+
   return (
     <MainContainer>
       <SeriesSection setSelectedSerie={setSelectedSerie} />

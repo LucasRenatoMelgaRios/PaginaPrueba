@@ -6,7 +6,6 @@ import { FaDiscord } from "react-icons/fa6";
 
 export const Footer = () => {
 
-
   return (
     <>
       <FooterContainer>
