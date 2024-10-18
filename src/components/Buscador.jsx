@@ -7,10 +7,17 @@ const SearchBar = styled.div`
   align-items: center;
   border-radius: 8px;
   padding: 15px 10px 15px 0px;
-  max-width: 200px; /* Ajusta el ancho según tus necesidades */
+  max-width: 200px; /* Ancho máximo por defecto */
   height: 40px;
   color: #ffffff;
   background-color: #4e4d4d2e;
+  overflow: hidden; /* Evita el desbordamiento */
+
+  @media (max-width: 310px) {
+    max-width: 120px; /* Reducir el ancho en pantallas pequeñas */
+    height: 20px; /* Reducir la altura en pantallas pequeñas */
+    padding: 10px 8px; /* Ajustar el padding */
+  }
 `;
 
 const SearchInput = styled.input`
@@ -22,9 +29,19 @@ const SearchInput = styled.input`
   padding: 5px;
   padding-left: 20px;
 
+  /* Evitar desbordamiento del texto */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   /* Estilo del placeholder */
   ::placeholder {
-    color: #ffffff; /* Asegura que el placeholder sea blanco */
+    color: #ffffff; /* Placeholder blanco */
+  }
+
+  @media (max-width: 310px) {
+    font-size: 12px; /* Reducir tamaño de fuente en pantallas pequeñas */
+    padding-left: 10px; /* Ajustar padding para mantener espacio */
   }
 `;
 
@@ -37,6 +54,16 @@ const SearchIcon = styled.span`
 
   svg {
     fill: #ffffff;
+    width: 16px;
+    height: 16px;
+  }
+
+  @media (max-width: 310px) {
+    margin-left: -35px; /* Ajustar posición del ícono en pantallas pequeñas */
+    svg {
+      width: 14px; /* Reducir tamaño del ícono */
+      height: 14px;
+    }
   }
 `;
 
@@ -49,11 +76,10 @@ export const Buscador = ({ setSearchQuery }) => {
   };
 
   const handleSearchSubmit = () => {
-    console.log("Submitting search:", query); // Asegúrate de que 'query' tenga el valor esperado
+    console.log("Submitting search:", query); 
     setSearchQuery(query); 
     navigate('/resultados'); 
   };
-  
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {

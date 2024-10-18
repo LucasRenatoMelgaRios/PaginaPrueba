@@ -26,9 +26,6 @@ export const Header = ({ setSearchQuery }) => {
     };
   }, []);
 
-  console.log("Header received setSearchQuery:", setSearchQuery); // Verifica que se recibe correctamente
-
-
   return (
     <>
       <HeaderContainer>
@@ -38,6 +35,8 @@ export const Header = ({ setSearchQuery }) => {
               <img src={marca} alt="Marca" />
             </Link>
           </LogoContainer>
+
+          {/* NavBar: Se ocultará en pantallas pequeñas */}
           <NavBar>
             <ul>
               <li>
@@ -54,9 +53,12 @@ export const Header = ({ setSearchQuery }) => {
               </li>
             </ul>
           </NavBar>
+
           <UserContainer>
             <Buscador setSearchQuery={setSearchQuery} />
             <img src={user} alt="Usuario" />
+            
+            {/* HamburgerIcon: Solo se mostrará en pantallas pequeñas */}
             <HamburgerIcon onClick={toggleMenu}>
               <FaBars size={24} color="#fff" />
             </HamburgerIcon>
@@ -64,6 +66,7 @@ export const Header = ({ setSearchQuery }) => {
         </HeaderWrapper>
       </HeaderContainer>
 
+      {/* Menú móvil que se activa con el icono de la hamburguesa */}
       {menuOpen && (
         <MobileNav>
           <ul>
@@ -97,11 +100,12 @@ export const Header = ({ setSearchQuery }) => {
 // CSS-in-JS Styling
 const HeaderContainer = styled.header`
   display: flex;
-  width: 100%;
-  height: clamp(60px, 8vh, 100px);
-  margin-top: 20px;
+  width: 100vw;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  height: clamp(40px, 6vh, 100px);
   background-color: rgb(25, 25, 25);
-  border: 1px solid rgb(8, 8, 8);
   box-shadow: 0 7px 8px rgb(29, 29, 29);
   align-items: center;
   justify-content: center;
@@ -114,12 +118,13 @@ const HeaderWrapper = styled.div`
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  gap: 10px;
+  gap: clamp(10px, 5vw, 30px);
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 clamp(10px, 2vw, 20px);
+  margin-top: clamp(10px, 2vh, 20px);
 
-  @media (max-width: 500px) {
-    gap: 5px; /* Reduce the gap for smaller screens */
+  @media (max-width: 865px) {
+    justify-content: space-around;
   }
 `;
 
@@ -130,25 +135,25 @@ const LogoContainer = styled.div`
   align-items: center;
 
   img {
-    width: clamp(80px, 15vw, 120px);
+    width: clamp(50px, 10vw, 120px);
     margin-top: 5px;
   }
 `;
 
+// Mostrar solo en pantallas grandes
 const NavBar = styled.nav`
   flex: 3;
-  margin-right: 200px;
+  display: flex;
+  justify-content: center;
+
   ul {
     display: flex;
     gap: clamp(5px, 1.5vw, 20px);
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     padding: 0;
     margin: 0;
     list-style: none;
-
-    @media (max-width: 865px) {
-    }
   }
 
   ul > li > a {
@@ -156,15 +161,17 @@ const NavBar = styled.nav`
     text-decoration: none;
     font-weight: bold;
     font-size: clamp(10px, 0.7vw, 16px);
-    
   }
 
+  @media (max-width: 865px) {
+    display: none; /* Ocultar el NavBar en pantallas pequeñas */
+  }
 `;
 
 const UserContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px; /* Reduced gap for mobile screens */
+  gap: 10px;
 
   img {
     width: clamp(25px, 3vw, 50px);
@@ -172,38 +179,42 @@ const UserContainer = styled.div`
 
   @media (max-width: 500px) {
     img {
-      display: none; /* Hide the user image on smaller screens to save space */
+      display: none;
     }
   }
 `;
 
+// Icono de la hamburguesa: Mostrar solo en pantallas pequeñas
 const HamburgerIcon = styled.div`
   display: none;
-  cursor: pointer;
 
   @media (max-width: 865px) {
     display: block;
+    cursor: pointer;
   }
 `;
 
+// MobileNav: Menú móvil
 const MobileNav = styled.nav`
-  position: absolute;
-  top: 10%; /* Position directly below the header */
+  position: fixed; /* Asegúrate de que esté fijo en la parte superior */
+  top: 0;
   left: 0;
   right: 0;
-  background-color: rgba(5, 4, 4, 0.8);
-  backdrop-filter: blur(10px); /* Apply blur effect */
-  z-index: 2; /* Ensure it appears above other elements */
-  padding: 20px 0;
+  background-color: rgba(5, 4, 4, 0.95); /* Fondo más opaco */
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  z-index: 10; /* Asegúrate de que esté encima de otros elementos */
   display: flex;
   justify-content: center;
+  align-items: center; /* Centrar verticalmente el contenido */
+  flex-direction: column; /* Alinear el contenido en una columna */
+  overflow-y: auto; /* Habilitar el desplazamiento si es necesario */
 
   ul {
     display: flex;
     flex-direction: column;
     align-items: center;
     list-style: none;
-    gap: 10px;
+    gap: 20px;
     padding: 0;
     margin: 0;
 
@@ -215,7 +226,7 @@ const MobileNav = styled.nav`
       color: #fff;
       text-decoration: none;
       font-weight: bold;
-      font-size: 18px; /* Larger font size for mobile menu */
+      font-size: 18px;
     }
   }
 `;
@@ -224,7 +235,7 @@ const StyledLink = styled(Link)`
   color: #fff;
   text-decoration: none;
   font-weight: bold;
-  font-size: clamp(22px, 0.7vw, 26px);
+  font-size: clamp(14px, 2vw, 16px);
   padding: 5px 15px;
   border: 1px solid #2b2727;
   border-radius: 20px;

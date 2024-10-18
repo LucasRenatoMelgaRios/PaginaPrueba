@@ -6,21 +6,25 @@ import { GiMountains } from "react-icons/gi";
 import { PiBookOpenTextLight } from "react-icons/pi";
 import { CgTag } from "react-icons/cg";
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { db } from "../../firebase";
 
-export const BibliotecaSection = ({ setSelectedObra }) => { // Recibe setSelectedObra
+
+export const BibliotecaSection = ({ setSelectedObra }) => {
     const [obras, setObras] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
-    const navigate = useNavigate(); // Crea una instancia de useNavigate
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await GetBibliotecaData();
-            setObras(data);
-        };
-
-        fetchData();
-    }, []);
+      const fetchData = async () => {
+          const data = await GetBibliotecaData();
+          console.log("Datos obtenidos de Firestore:", data);
+          setObras(data);
+      };
+  
+      fetchData();
+  }, []);
+  
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -29,8 +33,8 @@ export const BibliotecaSection = ({ setSelectedObra }) => { // Recibe setSelecte
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleCardClick = (obra) => {
-        setSelectedObra(obra); // Guarda la obra seleccionada
-        navigate('/obra-info'); // Navega a la página de información de la obra
+        setSelectedObra(obra);
+        navigate('/obra-info');
     };
 
     return (

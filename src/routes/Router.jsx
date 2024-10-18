@@ -36,7 +36,7 @@ export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSe
 
   return (
     <HashRouter>
-      <Header setSearchQuery={setSearchQuery} /> {/* Pasar setSearchQuery al Header */}
+      <Header setSearchQuery={setSearchQuery} /> 
       {menuOpen && (
         <MobileNav>
           <ul>
@@ -68,7 +68,7 @@ export const MyRouters = ({ selectedSerie, setSelectedSerie, selectedObra, setSe
         <Route path="/obra-info" element={<InfoObraPage selectedObra={selectedObra} />} />
         <Route path="/resultados" element={<ResultadosPage searchQuery={searchQuery} setSearchQuery={setSearchQuery} setSelectedObra={setSelectedObra} />} />
       </Routes>
-      <Footer />
+    <Footer /> 
     </HashRouter>
   );
 };
