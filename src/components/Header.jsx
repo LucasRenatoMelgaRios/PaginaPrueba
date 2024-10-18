@@ -105,7 +105,7 @@ const HeaderContainer = styled.header`
   margin: 0;
   padding: 0;
   height: clamp(40px, 6vh, 100px);
-  background-color: rgb(25, 25, 25);
+  background-color: inherit;
   box-shadow: 0 7px 8px rgb(29, 29, 29);
   align-items: center;
   justify-content: center;
